@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./cntxMenu.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/cntxMenuMain.css">
+    <link id="cntxMenuCSS" rel="stylesheet" type="text/css" href="./css/cntxMenuLight.css">
+    <script type="text/javascript">
+      function butonCliqued(rcE,btE,val, btn){
+        console.log(rcE); //ContextMenu Event
+        console.log(btE); //Button Event
+        console.log(val); //Button Value
+        console.log(btn); //Button Object
+      }
+      
+      function butonTheme(rcE,btE,v){
+        if(v===10){
+          $('#cntxMenuCSS').attr('href','./css/cntxMenuDark.css');
+        }else{
+          $('#cntxMenuCSS').attr('href',v);
+        }
+      }
+      
+      function disableMenu2(rcE,btE,v){
+        menu2.disable(v);
+      }
+      
+      function disableButton7(rcE,btE,v,btn){
+        if(v){
+          v.enable();
+        }else{
+          btn.disable();
+        }
+      }
+      
+      function setButtonPos(rcE,btE,v,btn){
+        btn.setPos(v);
+      }
+      
+      $(document).ready(function(){
+        
+        // Menu 1
+        menu = new cntxMenu('test','#guineaPig','optionalClass')
+          .add(btn1 = new cntxMenuButton('btn1',1, 'LogEvents 1!', './imgs/testint.png', butonCliqued))
+          .add(btn2 = new cntxMenuButton('btn2',2, 'LogEvents 2!', './imgs/testwarn.png', butonCliqued));
+        
+        
+        // Menu 2
+        menu2 = cntxMenu('test2','#guineaPig2')
+          .add(btn3 = cntxMenuButton('btn3',10, 'DarkMenu', './imgs/testcancel.png', butonTheme))
+          .add(btn4 = cntxMenuButton('btn4','./cntxMenuLight.css', 'LightMenu', './imgs/testokay.png', butonTheme));       
+
+        
+        // Menu 3
+        menu3 = cntxMenu('test3','#guineaPig3')
+          .add(cntxMenuButton('btn5',true, 'Disable Menu 2', './imgs/testcancel.png', disableMenu2))
+          .add(cntxMenuButton('btn6',false, 'Enable Menu 2', './imgs/testokay.png', disableMenu2));
+        
+        
+        // Menu 4
+        menu4 = cntxMenu('test4','#guineaPig4')
+          .add(btn7 = cntxMenuButton('btn7',null, 'Disable this', './imgs/testint.png', disableButton7))
+          .add(cntxMenuButton('btn8',btn7, 'Enable that', './imgs/testwarn.png', disableButton7));
+              
+      
+        // Menu 5
+        menu5 = new cntxMenu('test5','#guineaPig5')
+          .add(btn9 = new cntxMenuButton('btn9',-1, 'Make this last', './imgs/testint.png', setButtonPos))
+          .add(btn10 = new cntxMenuButton('btn10',-1, 'Make this last', './imgs/testcancel.png', setButtonPos))
+          .add(btn11 = new cntxMenuButton('btn11',0, 'Make this first', './imgs/testquest.png', setButtonPos))
+          .add(btn12 = new cntxMenuButton('btn12',0, 'Make this first', './imgs/testadd.png', setButtonPos))
+          .add(btn13 = new cntxMenuButton('btn13',2, 'Make this third', './imgs/testokay.png', setButtonPos))
+          .add(btn14 = new cntxMenuButton('btn14',1, 'Make this second', './imgs/testwarn.png', setButtonPos))
+          .add(btn15 = new cntxMenuButton('btn15',-2, 'Make this second last', './imgs/testedit.png', setButtonPos));
+        
+      });
+    </script>
+    <style>
+      .box{
+        margin:10px;
+        padding: 4px;
+        float:left;
+        width:100px;
+        height:100px;
+        background-color:#dddddd;
+        box-sizing: border-box;
+        font-family: verdana;
+        font-size: 12px;
+      }
+      .optionalClass{
+        border-style:ridge;
+        border-width:3px;
+      } 
+      .optionalClass li{
+        border-style:ridge;
+        border-bottom-width:3px;
+      }
+      .optionalClass li:last-child{
+        border-width:0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="guineaPig" class="box">
+      Log callback arguments to console.<br /> Also has a class parameter.
+    </div>
+    <div id="guineaPig2" class="box">
+      Switch CSS
+    </div>
+    <div id="guineaPig3" class="box">
+      Disable Menus
+    </div>
+    <div id="guineaPig4" class="box">
+      Disable Buttons
+    </div>
+    <div id="guineaPig5" class="box">
+      Set Button positions
+    </div>
+  </body>
+</html>

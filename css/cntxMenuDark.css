@@ -1,0 +1,14 @@
+.contextMenu {
+  background-color: #3B3C3F;
+  color: white;
+}
+
+.contextMenu li:hover .ct_left {
+  background-image: url(bg_start.png);
+}
+.contextMenu li:hover .ct_right {
+  background-image: url(bg_end.png);
+}
+.contextMenu li:hover .ct_middle {
+  background-image: url(bg_mid.png);
+}
