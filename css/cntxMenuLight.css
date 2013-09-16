@@ -4,11 +4,11 @@
 }
 
 .contextMenu li:hover .ct_left {
-  background-image: url(bg_start_.png);
+  background-image: url(../bgs/bg_start_.png);
 }
 .contextMenu li:hover .ct_right {
-  background-image: url(bg_end_.png);
+  background-image: url(../bgs/bg_end_.png);
 }
 .contextMenu li:hover .ct_middle {
-  background-image: url(bg_mid_.png);
+  background-image: url(../bgs/bg_mid_.png);
 }

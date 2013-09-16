@@ -3,8 +3,8 @@
   <head>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="./cntxMenu.js"></script>
-    <link rel="stylesheet" type="text/css" href="./cntxMenuMain.css">
-    <link id="cntxMenuCSS" rel="stylesheet" type="text/css" href="./cntxMenuLight.css">
+    <link rel="stylesheet" type="text/css" href="./css/cntxMenuMain.css">
+    <link id="cntxMenuCSS" rel="stylesheet" type="text/css" href="./css/cntxMenuLight.css">
     <script type="text/javascript">
       function butonCliqued(rcE,btE,val, btn){
         console.log(rcE); //ContextMenu Event
@@ -15,7 +15,7 @@
       
       function butonTheme(rcE,btE,v){
         if(v===10){
-          $('#cntxMenuCSS').attr('href','./cntxMenuDark.css');
+          $('#cntxMenuCSS').attr('href','./css/cntxMenuDark.css');
         }else{
           $('#cntxMenuCSS').attr('href',v);
         }
@@ -41,37 +41,37 @@
         
         // Menu 1
         menu = new cntxMenu('test','#guineaPig','optionalClass')
-          .add(btn1 = new cntxMenuButton('btn1',1, 'LogEvents 1!', 'testint.png', butonCliqued))
-          .add(btn2 = new cntxMenuButton('btn2',2, 'LogEvents 2!', 'testwarn.png', butonCliqued));
+          .add(btn1 = new cntxMenuButton('btn1',1, 'LogEvents 1!', './imgs/_int.png', butonCliqued))
+          .add(btn2 = new cntxMenuButton('btn2',2, 'LogEvents 2!', './imgs/_warn.png', butonCliqued));
         
         
         // Menu 2
         menu2 = cntxMenu('test2','#guineaPig2')
-          .add(btn3 = cntxMenuButton('btn3',10, 'DarkMenu', 'testcancel.png', butonTheme))
-          .add(btn4 = cntxMenuButton('btn4','./cntxMenuLight.css', 'LightMenu', 'testokay.png', butonTheme));       
+          .add(btn3 = cntxMenuButton('btn3',10, 'DarkMenu', './imgs/_cancel.png', butonTheme))
+          .add(btn4 = cntxMenuButton('btn4','./css/cntxMenuLight.css', 'LightMenu', './imgs/_okay.png', butonTheme));       
 
         
         // Menu 3
         menu3 = cntxMenu('test3','#guineaPig3')
-          .add(cntxMenuButton('btn5',true, 'Disable Menu 2', 'testcancel.png', disableMenu2))
-          .add(cntxMenuButton('btn6',false, 'Enable Menu 2', 'testokay.png', disableMenu2));
+          .add(cntxMenuButton('btn5',true, 'Disable Menu 2', './imgs/_cancel.png', disableMenu2))
+          .add(cntxMenuButton('btn6',false, 'Enable Menu 2', './imgs/_okay.png', disableMenu2));
         
         
         // Menu 4
         menu4 = cntxMenu('test4','#guineaPig4')
-          .add(btn7 = cntxMenuButton('btn7',null, 'Disable this', 'testint.png', disableButton7))
-          .add(cntxMenuButton('btn8',btn7, 'Enable that', 'testwarn.png', disableButton7));
+          .add(btn7 = cntxMenuButton('btn7',null, 'Disable this', './imgs/_int.png', disableButton7))
+          .add(cntxMenuButton('btn8',btn7, 'Enable that', './imgs/_warn.png', disableButton7));
               
       
         // Menu 5
         menu5 = new cntxMenu('test5','#guineaPig5')
-          .add(btn9 = new cntxMenuButton('btn9',-1, 'Make this last', 'testint.png', setButtonPos))
-          .add(btn10 = new cntxMenuButton('btn10',-1, 'Make this last', 'testcancel.png', setButtonPos))
-          .add(btn11 = new cntxMenuButton('btn11',0, 'Make this first', 'testquest.png', setButtonPos))
-          .add(btn12 = new cntxMenuButton('btn12',0, 'Make this first', 'testadd.png', setButtonPos))
-          .add(btn13 = new cntxMenuButton('btn13',2, 'Make this third', 'testokay.png', setButtonPos))
-          .add(btn14 = new cntxMenuButton('btn14',1, 'Make this second', 'testwarn.png', setButtonPos))
-          .add(btn15 = new cntxMenuButton('btn15',-2, 'Make this second last', 'testedit.png', setButtonPos));
+          .add(btn9 = new cntxMenuButton('btn9',-1, 'Make this last', './imgs/_int.png', setButtonPos))
+          .add(btn10 = new cntxMenuButton('btn10',-1, 'Make this last', './imgs/_cancel.png', setButtonPos))
+          .add(btn11 = new cntxMenuButton('btn11',0, 'Make this first', './imgs/_quest.png', setButtonPos))
+          .add(btn12 = new cntxMenuButton('btn12',0, 'Make this first', './imgs/_add.png', setButtonPos))
+          .add(btn13 = new cntxMenuButton('btn13',2, 'Make this third', './imgs/_okay.png', setButtonPos))
+          .add(btn14 = new cntxMenuButton('btn14',1, 'Make this second', './imgs/_warn.png', setButtonPos))
+          .add(btn15 = new cntxMenuButton('btn15',-2, 'Make this second last', './imgs/_edit.png', setButtonPos));
         
       });
     </script>
