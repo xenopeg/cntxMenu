@@ -34,6 +34,7 @@
       }
       
       function setButtonPos(rcE,btE,v,btn){
+        console.log(v,btn);
         btn.setPos(v);
       }
       
@@ -88,12 +89,13 @@
         font-size: 12px;
       }
       .optionalClass{
-        border-style:ridge;
-        border-width:3px;
+        border-style:dashed;
+        border-width:1px;
       } 
       .optionalClass li{
-        border-style:ridge;
-        border-bottom-width:3px;
+        border-style:dashed;
+        border-bottom-width:1px;
+        border-top-width: 0;
       }
       .optionalClass li:last-child{
         border-width:0px;

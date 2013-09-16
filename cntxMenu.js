@@ -44,122 +44,181 @@ Object.defineProperty(
 
 function cntxMenu(name, bind, subclass){
   if ( !(this instanceof cntxMenu) ){
-    return new (Function.prototype.bind.apply(
-    cntxMenu
-    , ([this].concat(Array.prototype.slice.call(arguments))) ));
+    return new (
+      Function.prototype.bind.apply(
+        cntxMenu
+        , ([this].concat(Array.prototype.slice.call(arguments))) 
+      )
+    );
   }
-  this.name = name;
-  this.bind = bind;
-  this.subclass = subclass || "";
-  this.buttons = {};
-  this.element;
+  var name = name
+    , bind = bind
+    , subclass = subclass || ""
+    , buttons = {}
+    , node
+    , ULnode
+    , enabled = true;
   
-  this.enabled = true;
+  function enable(v){
+    enabled = typeof v === 'boolean' ? v : true;
+  };this.enable = enable;
   
-  this.enable = function(v){
-    this.enabled = typeof v === 'boolean' ? v : true;
-  };
-  
-  this.disable = function(v){
-    this.enabled = typeof v === 'boolean' ? !v : false;
-  };
+  function disable(v){
+    enabled = typeof v === 'boolean' ? !v : false;
+  };this.disable = disable;
   
   var lastEvent;
 
-  this.genHtml = function(){
-    return wTmplt.fillWith(this);
-  };
+  function genHtml(){
+    return wTmplt.fillWith({
+      name: name,
+      subclass: subclass
+    });
+  };this.genHtml = genHtml;
 
-  this.getHtml = function(){
-    return this.element;
+  function getNode(){
+    return node;
+  };this.getNode = getNode;
+  
+  function setup(){
+    node = $(genHtml()).appendTo('body');
+    ULnode = node.children('ul');
+
+    $('body').on('contextmenu', bind, onCntxMenu);    
+
+    $(window).on('blur', onBlur);
+    $(document).on('click', onLoseFocus);
+    node.on('click', onInsideClick);
+    $(document).on('contextmenu', onOtherMenu);
+    node.on('contextmenu', onYoDawgMenu);
+    $(bind).on('click', onBindClick);    
   };
   
-  this.setup = function(){
-    this.element = ($(this.genHtml()).appendTo('body'));
-
-    $('body').on('contextmenu', this.bind, function(e) {
-      if(!this.enabled)return true;
-      this.lastEvent = e;
-      $('.cntxMenu').hide();
-      
-      // Check Screen Limits
-      if($('#'+this.name+'CntxMenu').width() + e.pageX <= window.innerWidth){
-        $('#'+this.name+'CntxMenu')
-          .css('right', 'auto')
-          .css('left', e.pageX);
-      }else{
-        $('#'+this.name+'CntxMenu')
-          .css('left', 'auto')
-          .css('right', window.innerWidth - e.pageX);
-      }      
-      
-      if($('#'+this.name+'CntxMenu').height() + e.pageY <= window.innerHeight){
-        $('#'+this.name+'CntxMenu')
-          .css('bottom', 'auto')
-          .css('top', e.pageY);
-      }else{
-        $('#'+this.name+'CntxMenu')
-          .css('top', 'auto')
-          .css('bottom', window.innerHeight - e.pageY);
-      }
-      
-      
-      $('#'+this.name+'CntxMenu').show();
-      return false;
-    }.bind(this));    
-
-    $(window).blur(function(){
-      $('#'+this.name+'CntxMenu').hide();
-    }.bind(this));
-
-    $(document).click(function() {
-      $('#'+this.name+'CntxMenu').hide();
-    }.bind(this));
-
-    $('#'+this.name+'CntxMenu').click(function(event) {
-      event.stopPropagation();
-    }.bind(this));
-
-    $(document).on('contextmenu', function() {
-      $('#'+this.name+'CntxMenu').hide();
-    }.bind(this));
-
-    $('#'+this.name+'CntxMenu').on('contextmenu', function(event) {
-      event.stopPropagation();
-    }.bind(this));
-
-    $(this.bind).on('click', function(event) {
-      $('#'+this.name+'CntxMenu').hide();
-    }.bind(this));    
-  };
-
-  this.addButton = function(btn){
-    this.buttons[btn.name] = btn;
-    return ($(btn.genHtml()).appendTo('#'+this.name+'CntxMenuUL'));
-  };
-
-  this.getId = function(){
-      return this.name+'CntxMenu';
-  };
-
-  this.getLastEvent = function(){      
-    return this.lastEvent;
-  };
-  
-  this.checkButtons = function(){
-    if( !(this.buttons.toList().some(function(v){return v.enabled})) ){
-      this.disable();
-    }else{
-      this.enable();
-    }
+  function onBindClick(event) {
+    node.hide();
   }
-  
-  this.add = function(button){
-    button.setup(this);
+  function onYoDawgMenu(event) {
+    event.stopPropagation();
+  }
+  function onOtherMenu(){
+    node.hide();
+  }
+  function onInsideClick(event) {
+    event.stopPropagation();
+  }
+  function onLoseFocus() {
+    node.hide();
+  }
+  function onBlur(){
+    node.hide();
+  }
+  function onCntxMenu(e) {
+    if(!enabled)return true;
     
+    lastEvent = e;
+    
+    // Hide other context menus
+    $('.cntxMenu').hide();
+    
+    // Check Screen Limits
+    if( node.width() + e.pageX <= window.innerWidth ){      
+      node.css({
+        'left': e.pageX,
+        'right': 'auto'
+      });
+    }else{
+      node.css({
+        'left': 'auto',
+        'right': window.innerWidth - e.pageX
+      });
+    }      
+    
+    if(node.height() + e.pageY <= window.innerHeight){
+      node.css({
+        'bottom': 'auto',
+        'top': e.pageY
+      });
+    }else{
+      node.css({
+        'bottom': window.innerHeight - e.pageY,
+        'top': 'auto'
+      });
+    }
+    
+    node.show();
+    return false;
+  }
+
+  function addButton(btn){
+    buttons[btn.getName()] = btn;
+    ULnode.append(btn.getNode());
+  };this.addButton = addButton;
+
+  function getId(){
+      return name+'CntxMenu';
+  };this.getId = getId;
+
+  function getLastEvent(){      
+    return lastEvent;
+  };this.getLastEvent = getLastEvent;
+  
+  function checkButtons(){
+    var anyVisible = buttons.toList()
+        .some(function(v){return v.isEnabled();});
+        
+    if( anyVisible ){
+      enable();
+    }else{
+      disable();
+    }
+    
+  };this.checkButtons = checkButtons;
+  
+  function add(button){
+    button.setup(this);
+    delete button.setup;
     return this;
-  };
-  this.setup();
+  };this.add = add;
+  
+  function remove(){    
+    buttons.toList().forEach(function(v){
+      v.remove();
+    });
+    $(bind).off('click', onBindClick);    
+    node.off('contextmenu', onYoDawgMenu);
+    $(document).off('contextmenu', onOtherMenu);
+    node.off('click', onInsideClick);
+    $(document).off('click', onLoseFocus);
+    $(window).off('blur', onBlur);
+    $('body').off('contextmenu', bind, onCntxMenu);  
+    
+  };this.remove = remove;
+  
+  function removeMe(btn){
+    delete buttons[btn.getName()];
+  };this.removeMe = removeMe;
+  
+  function hide(){
+    node.hide();
+  };this.hide = hide;
+  
+  function setButtonPos(btn, p){
+    var btNode = btn.getNode();
+    btNode.detach();
+    if(p >= Object.keys(buttons).length){
+      p = Object.keys(buttons).length-1;
+    }
+    if(p < 0){
+      p = Object.keys(buttons).length+p;
+    }
+    if(p === 0){
+      node.find('li:eq(0)').before(btNode).show();
+    }else{
+      node.find('li:eq('+(p-1)+')').after(btNode).show();
+    }
+  };this.setButtonPos = setButtonPos;
+  
+  setup();
 }
 
 function cntxMenuButton(name, value, text, img, func){
@@ -168,68 +227,81 @@ function cntxMenuButton(name, value, text, img, func){
     cntxMenuButton
     , ([this].concat(Array.prototype.slice.call(arguments))) ));
   }
-  this.name = name;
-  this.value = value;
-  this.text = text;
-  this.img  =  img;
-  this.func = func;
-  this.enabled = true;
-  this.menu;
-  this.element;
-
   
-  this.getHtml = function(){
-    return this.element;
-  };
+  var name = name
+    , value = value
+    , text = text
+    , img  =  img
+    , func = func
+    , enabled = true
+    , menu
+    , node
+    , _this = this
+    ; 
   
-  this.genHtml = function(){
-    return bTmplt.fillWith(this);
-  };
-
-  this.getId = function(){
-      return this.name+'CntxButton';
-  };
-
-  this.setup = function(m){
-    this.menu = m;
-    this.element = this.menu.addButton(this);
-
-    $('#'+this.name+'CntxButton').on('click', $.proxy(function(e){
-      $('#'+this.menu.name+'CntxMenu').hide();
-      this.func(this.menu.getLastEvent(),e, this.value, this);
-    }, this));
-  };
+  function getNode(){
+    return node;
+  };this.getNode = getNode;
+    
+  function getName(){
+    return name;
+  };this.getName = getName;
+      
+  function isEnabled(){
+    return enabled;
+  };this.isEnabled = isEnabled;
   
-  this.enable = function(v){
-    if(this.enabled = (typeof v === 'boolean' ? v : true)){
-      $(this.element).show();
+  function genHtml(){
+    return bTmplt.fillWith({
+      name: name,
+      text: text,
+      img: img
+    });
+  };this.genHtml = genHtml;
+
+  function getId(){
+    return name+'CntxButton';
+  };this.getId = getId;
+
+  function onBtnClick(e){
+    menu.hide();
+    func(menu.getLastEvent(),e, value, _this);
+  }
+  
+  function setup(m){
+    menu = m;
+    node = $(genHtml());
+    menu.addButton(_this);
+    node.on('click', onBtnClick);
+  };this.setup = setup;
+  
+  function enable(v){
+    if(enabled = (typeof v === 'boolean' ? v : true)){
+      node.show();
     }else{
-      $(this.element).hide();
+      node.hide();
     }
-    this.menu.checkButtons();
-  };
-  this.disable = function(v){
-    if(this.enabled = (typeof v === 'boolean' ? !v : false)){
-      $(this.element).show();
+    menu.checkButtons();
+  };this.enable = enable;
+  
+  function disable(v){
+    if(enabled = (typeof v === 'boolean' ? !v : false)){
+      node.show();
     }else{
-      $(this.element).hide();
+      node.hide();
     }
-    this.menu.checkButtons();
-  };  
-  this.setPos = function(p){
-    $(this.element).detach();
-    if(p >= Object.keys(this.menu.buttons).length){
-      p = Object.keys(this.menu.buttons).length-1;
-    }
-    if(p < 0){
-      p = Object.keys(this.menu.buttons).length+p;
-    }
-    if(p === 0){
-      $(this.menu.getHtml()).find('li:eq(0)').before(this.element);
-    }else{
-      $(this.menu.getHtml()).find('li:eq('+(p-1)+')').after(this.element);
-    }
-  };
+    menu.checkButtons();
+  };this.disable = disable;
+  
+  function setPos(p){
+    menu.setButtonPos(_this,p);
+  };this.setPos = setPos;
+  
+  function remove(){
+    node.off('click', onBtnClick);
+    node.remove();
+    menu.removeMe(this);
+  };this.remove = remove;
 }
             
             
