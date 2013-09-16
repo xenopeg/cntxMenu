@@ -51,13 +51,25 @@ function cntxMenu(name, bind, subclass){
       )
     );
   }
-  var name = name
-    , bind = bind
-    , subclass = subclass || ""
+  var name
+    , bind
+    , subclass
     , buttons = {}
     , node
     , ULnode
-    , enabled = true;
+    , enabled = true
+    ;
+  if(typeof name === 'object'){
+    bind = name.bind
+    , subclass = name.subclass || ""
+    , name = name.name
+      ;
+  }else{
+    name = name
+    , bind = bind
+    , subclass = subclass || ""
+      ;  
+  }
   
   function enable(v){
     enabled = typeof v === 'boolean' ? v : true;
@@ -228,17 +240,33 @@ function cntxMenuButton(name, value, text, img, func){
     , ([this].concat(Array.prototype.slice.call(arguments))) ));
   }
   
-  var name = name
-    , value = value
-    , text = text
-    , img  =  img
-    , func = func
+  var name 
+    , value 
+    , text
+    , img 
+    , func
     , enabled = true
     , menu
     , node
     , _this = this
-    ; 
+    ;   
   
+    if(typeof name === 'object'){
+      value = name.value
+      , text = name.text
+      , img  =  name.img
+      , func = name.func
+      , name = name.name
+      ; 
+    }else{
+      name = name
+      , value = value
+      , text = text
+      , img  =  img
+      , func = func
+      ;  
+    }
+    
   function getNode(){
     return node;
   };this.getNode = getNode;
@@ -258,7 +286,6 @@ function cntxMenuButton(name, value, text, img, func){
       img: img
     });
   };this.genHtml = genHtml;
-<<<<<<< HEAD
 
   function getId(){
     return name+'CntxButton';
@@ -276,8 +303,6 @@ function cntxMenuButton(name, value, text, img, func){
     node.on('click', onBtnClick);
   };this.setup = setup;
   
-=======
-
   function getId(){
     return name+'CntxButton';
   };this.getId = getId;
@@ -295,7 +320,6 @@ function cntxMenuButton(name, value, text, img, func){
     node.on('click', onBtnClick);
   };this.setup = setup;
   
->>>>>>> 4ee02c10d1c1652888ac7265c3a4400bca3d5f9b
   function enable(v){
     if(enabled = (typeof v === 'boolean' ? v : true)){
       node.show();

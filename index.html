@@ -47,8 +47,17 @@
         
         
         // Menu 2
-        menu2 = cntxMenu('test2','#guineaPig2')
-          .add(btn3 = cntxMenuButton('btn3',10, 'DarkMenu', './imgs/_cancel.png', butonTheme))
+        menu2 = cntxMenu({
+          name:'test2',
+          bind:'#guineaPig2'
+        })
+          .add(btn3 = cntxMenuButton({
+            name:'btn3',
+            value:10, 
+            text:'DarkMenu', 
+            img:'./imgs/_cancel.png', 
+            func:butonTheme
+          }))
           .add(btn4 = cntxMenuButton('btn4','./css/cntxMenuLight.css', 'LightMenu', './imgs/_okay.png', butonTheme));       
 
         
