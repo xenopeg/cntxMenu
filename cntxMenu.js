@@ -258,6 +258,7 @@ function cntxMenuButton(name, value, text, img, func){
       img: img
     });
   };this.genHtml = genHtml;
+<<<<<<< HEAD
 
   function getId(){
     return name+'CntxButton';
@@ -275,6 +276,26 @@ function cntxMenuButton(name, value, text, img, func){
     node.on('click', onBtnClick);
   };this.setup = setup;
   
+=======
+
+  function getId(){
+    return name+'CntxButton';
+  };this.getId = getId;
+
+  function onBtnClick(e){
+    menu.hide();
+    func(menu.getLastEvent(),e, value, _this);
+  };  
+  
+  function setup(m){
+    menu = m;
+    node = $(genHtml());
+    menu.addButton(_this);
+
+    node.on('click', onBtnClick);
+  };this.setup = setup;
+  
+>>>>>>> 4ee02c10d1c1652888ac7265c3a4400bca3d5f9b
   function enable(v){
     if(enabled = (typeof v === 'boolean' ? v : true)){
       node.show();
